@@ -7,6 +7,7 @@ from collections import Counter
 
 # Server starten mit:
 # uv run fastapi dev
+# uv run pytest main-test-fabi.py -v
 
 app = FastAPI(
     title="Angewandte Programmierung Kurs",
@@ -65,7 +66,7 @@ class NoteResponse(BaseModel):
     tags: list[str]
     created_at: datetime
     
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 #################################
