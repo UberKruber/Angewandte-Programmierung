@@ -174,7 +174,8 @@ _Explain how you overcame the challenges or what help you needed._
 
 #### 1. ✅ What did I accomplish?
 
-
+-Gruppenarbeit zusammenfinden und erklären gegebener Begriffe
+-austausch von Tests in der Gruppe
 
 
 
