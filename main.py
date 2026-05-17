@@ -1,14 +1,14 @@
 #-------- Importe ------------
 
-from fastapi import FastAPI, HTTPException, Depends # Werkzeuge für die Web-Schnittstelle
-from pydantic import BaseModel, Field, field_validator, ConfigDict # Prüfwerkzeug für Daten (z.B. Textlänge)
-from datetime import datetime # Werkzeuge für aktuelle Datum
-from typing import Optional, List #  legt Art von Import-Daten fest (darf auch leer stehen)
-from collections import Counter # zählen von Elementen
-import json # Textumwandlung
-from sqlmodel import SQLModel, Field as TypeField, Session, create_engine, select # Für Datenbank 
+from fastapi import FastAPI, HTTPException, Depends
+from pydantic import BaseModel, Field, field_validator, ConfigDict
+from datetime import datetime 
+from typing import Optional, List
+from collections import Counter
+import json
+from sqlmodel import SQLModel, Field as TypeField, Session, create_engine, select
 
-# --- Erlaubte Kathegorien ---
+# --- Erlaubte Kategorien ---
 
 ALLOWED_CATEGORIES = {"work", "personal", "school", "ideas", "general"}
 
@@ -17,18 +17,17 @@ app = FastAPI(title="Notiz API", version="1.0.0")
 
 # --- DATENBANK EINRICHTEN ---
 
-# Verbindung zur Datei notes.db herstellen
 engine = create_engine("sqlite:///notes.db")
 
 # Tabelle für die Datenbank definieren
 class NoteTable(SQLModel, table=True):
     __tablename__ = "notes"
 
-    id: Optional[int] = TypeField(default=None, primary_key=True) # ID wird automatisch vergeben
+    id: Optional[int] = TypeField(default=None, primary_key=True)
     title: str
     content: str
     category: str
-    tags_json: str = "[]" # Listen werden als Text gespeichert
+    tags_json: str = "[]"
     created_at: str
 
 # Datenbankdatei und Tabellen erzeugen
@@ -67,7 +66,7 @@ class NoteUpdate(BaseModel):
         return v
     
 
-# Modell für POST und PUT (Erstellen und Ersetzen)
+# Modell für POST und PUT
 class NoteCreate(BaseModel):
 
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
@@ -233,7 +232,7 @@ def list_notes(
 
     return filtered
 
-# Status prüfen (Server online?)
+# Status prüfen
 @app.get("/")
 def read_root():
     return {"message": "Note API is running"}
@@ -292,5 +291,5 @@ def delete_note(note_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Note not found")
         
     db.delete(db_note)
-    db.commit() # Eintrag löschen
+    db.commit()
     return
